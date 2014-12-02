@@ -14,7 +14,7 @@
 
 </head>
 <body>
-	<h1>Our Home Page</h1>
+	<h1>Our Home Page Changed</h1>
 	<hr>
 	<div class="tabs-row">
 	    <ul class="nav nav-tabs tabs">
