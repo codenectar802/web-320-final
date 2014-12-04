@@ -1,3 +1,4 @@
+<?php include 'header_controller.php'; ?>
 
 
 <html>
@@ -9,12 +10,14 @@
     <script src="libs/bootstrap-3.2.0/js/bootstrap.js"></script>
     <script src="js/index.js"></script>
 
+    <?php 
+    	include('header.php');
+
+    ?>
 
 </head>
 <body>
 	<div class="container">
-		<h1>Our Home Page</h1>
-		<hr>
 		<div class="tabs-row">
 		    <ul class="nav nav-tabs tabs">
 		        <li class="active"><a href="#home-tab-pane" class="active">Home</a></li>                        
