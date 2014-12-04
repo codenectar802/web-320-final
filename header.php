@@ -1,10 +1,11 @@
+<div class="header_div">
 <div class="container">
 	<div class="header_menu">
 		<ul class="nav navbar-nav main-nav pull-right">
 			<?php
+				include '../vars.php';
 				if ($user_login_manager->logged_in == True) {
 					echo "<li class='username_display'><h3>".$user_login_manager->user->get_fullname()."</h3></li>";
-					echo "<li>|</li>";
 					echo "<li><a class='btn btn-default' id='logout_link' data-toggle='modal' data-target='#logoutModal'>Log Out</a></li>";
 				} elseif ($user_login_manager->logged_in == False) {
 					echo "<li>
@@ -19,7 +20,8 @@
 			?>
         </ul>
         <div class="logo_container">
-			<h1>Conscious Games</h1>
+			<div><a href="<?php echo $PROJECT_DIRECTORY."home.php"; ?>">Conscious Games</a>
+			</div>
 		</div>
 	</div>
 
@@ -38,5 +40,6 @@
 	  <?php include 'partials/logout_modal.php'; ?>
 	</div>
 
+</div>
 </div>
 <hr>

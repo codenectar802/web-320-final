@@ -1,6 +1,7 @@
 <?php
 include 'user.php';
 
+
 class User_Database_Handler {
 	private $link;
 	private $status;

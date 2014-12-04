@@ -28,7 +28,15 @@
 
 		<div class="tab-content">
 			<div id="home-tab-pane" class="tab-pane active">
-				<h2>This will be the home pane</h2>
+				<div class="hangman_link game_link">
+					<h1>Hangman</h1>
+				</div>
+				<div class="typing_link game_link">
+					<h1>Typing</h1>
+				</div>
+				<div class="math_link game_link">
+					<h1>Math</h1>
+				</div>
 			</div>
 			<div id="about-tab-pane" class="tab-pane">
 				<h2>This will be the about pane</h2>
