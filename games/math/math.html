@@ -1,0 +1,21 @@
+<html>
+<head>
+    <title>Math Game</title>
+</head>
+
+<body>
+    <div id="options">
+        <form action="math.php" method="POST">
+            <h1>Math Game</h1>
+            <h3>Solve for either:</br></h3>
+            <input type="radio" name="gametype" value="op">The Operator</br>
+            <input type="radio" name="gametype" value="ans">The Answer</br>
+            <h3>Then either:</br></h3>
+            <input type="radio" name="mod" value="race">Race against the clock!</br>
+            <input type="radio" name="mod" value="set">Solve a problem set!</br>
+            <input type="hidden" name="act" value="run">
+            <input type="submit" name="submit" value="Start Game"></br>
+        </form>
+    </div>
+</body>
+</html>
