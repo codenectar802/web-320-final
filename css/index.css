@@ -25,6 +25,7 @@
 .tab-content {
 	position: relative;
 	top: -15px;
+	padding: 30px;
 }
 
 .tab-pane, .active {
