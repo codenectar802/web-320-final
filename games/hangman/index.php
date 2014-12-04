@@ -1,29 +1,40 @@
+<?php include '../../header_controller.php'; ?>
+
 <?php
 
 require_once('userlife.php');
 require_once('hangman.php');
-$dbconnection=mysql_connect("localhost", "root", "") or die ('cannot connect to DB');
-$connection=mysql_select_db("hangman_words",$dbconnection);
+$dbconnection=mysqli_connect("localhost", "root", "root","web320final") or die ('cannot connect to DB');
+$connection=mysqli_select_db($dbconnection, "hangman_words");
 
-session_start();
-if (!$_SESSION['userlife']['hangman'])
-	$_SESSION['userlife']['hangman'] = new hangman();
+    if(isset($_SESSION['userlife']['hangman'])) {
+        if (!$_SESSION['userlife']['hangman']) {
+        	$_SESSION['userlife']['hangman'] = new hangman();
+        } else {
+
+        }
+    } else {
+        $_SESSION['userlife']['hangman'] = new hangman();
+    }
 
 ?>
 
 <html>
 	<head>
 		<title>Hangman</title>
-        <link rel="stylesheet" type="text/css" href="libs/bootstrap-3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../../libs/bootstrap-3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="style.css">
         <link rel="stylesheet" type="text/css" href="css/typing.css">
         <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script src="libs/bootstrap-3.2.0/js/bootstrap.js"></script>
-        <script src="js/index.js"></script>
+        <script src="../../libs/bootstrap-3.2.0/js/bootstrap.js"></script>
+        <script src="../../js/index.js"></script>
+
+        <?php include('../../header.php'); ?>
+
     </head>
 	
     <body>
-    <hr>
+    <div class="container">
     <div class="tabs-row">
         <ul class="nav nav-tabs tabs">
             <li class="active"><a href="#game-pane" class="active">Game</a></li>
@@ -39,7 +50,9 @@ if (!$_SESSION['userlife']['hangman'])
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 		<h2>Hangman</h2>
 		<?php
-			$_SESSION['userlife']['hangman']->playGame($_POST);
+            if(isset($_SESSION['userlife']['hangman'])) {
+			     $_SESSION['userlife']['hangman']->playGame($_POST);
+            }
 		?>
 		</form>
 		</div>
@@ -75,7 +88,7 @@ if (!$_SESSION['userlife']['hangman'])
             </div>
             <div>
             </div>
-
+        </div>
 		
 	</body>
 </html>

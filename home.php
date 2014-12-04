@@ -10,10 +10,7 @@
     <script src="libs/bootstrap-3.2.0/js/bootstrap.js"></script>
     <script src="js/index.js"></script>
 
-    <?php 
-    	include('header.php');
-
-    ?>
+    <?php include('header.php'); ?>
 
 </head>
 <body>

@@ -14,7 +14,7 @@ class hangman extends userlife
 /*start game*/
 	function hangman()
 	{
-		game::start();
+		hangman::start();
 	}
 	
 	/*changes difficulty options. Easy-Medium-Hard*/
@@ -185,10 +185,10 @@ class hangman extends userlife
 	/*selects words based on difficulty selected*/
 	function loadWords()
 	{
-		$loop = mysql_query("SELECT word FROM words WHERE difficulty='$this->difficulty' ORDER BY RAND()")
+		$loop = mysqli_query("SELECT word FROM words WHERE difficulty='$this->difficulty' ORDER BY RAND()")
 			or die ('cannot load hangman words for this difficulty');
 			
-		while ($data = mysql_fetch_assoc($loop))
+		while ($data = mysqli_fetch_assoc($loop))
 			array_push($this->wList, trim($data['word']));
 	}
 	
