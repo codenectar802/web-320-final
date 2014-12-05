@@ -3,15 +3,11 @@
 
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="libs/bootstrap-3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
-	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-
-    <script src="libs/bootstrap-3.2.0/js/bootstrap.js"></script>
-    <script src="js/index.js"></script>
-
-    <?php include('header.php'); ?>
-
+    <?php
+    	// set the path to the root of the project
+    	$root_path = "";
+    	include('header.php');
+    ?>
 </head>
 <body>
 	<div class="container">
@@ -28,14 +24,25 @@
 
 		<div class="tab-content">
 			<div id="home-tab-pane" class="tab-pane active">
-				<div class="hangman_link game_link">
-					<h1>Hangman</h1>
-				</div>
-				<div class="typing_link game_link">
-					<h1>Typing</h1>
-				</div>
-				<div class="math_link game_link">
-					<h1>Math</h1>
+				<div class="game_link_container">
+					<div class="hangman_link game_link">
+						<a href="games/hangman/index.php">
+							<img src="games/hangman/images/8.jpg" alt="hangman_link"/>
+							<h1>Hangman</h1>
+						</a>
+					</div>				
+					<div class="typing_link game_link">
+						<a href="games/typing/typing.php">
+							<img src="games/typing/images/title_image.jpg" alt="hangman_link"/>
+							<h1>Typing</h1>
+						</a>
+					</div>
+					<div class="math_link game_link">
+						<a href="games/math/math.php">
+							<img src="games/hangman/images/8.jpg" alt="hangman_link"/>
+							<h1>Math</h1>
+						</a>
+					</div>
 				</div>
 			</div>
 			<div id="about-tab-pane" class="tab-pane">

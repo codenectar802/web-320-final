@@ -4,7 +4,7 @@
 
 require_once('userlife.php');
 require_once('hangman.php');
-$dbconnection=mysqli_connect("localhost", "root", "rastacrise92","web320final") or die ('cannot connect to DB');
+$dbconnection=mysqli_connect("localhost", "root", "root","web320final") or die ('cannot connect to DB');
 $connection=mysqli_select_db($dbconnection, "hangman_words");
 
     // If session variable does not exits
@@ -34,7 +34,10 @@ $connection=mysqli_select_db($dbconnection, "hangman_words");
         <script src="../../libs/bootstrap-3.2.0/js/bootstrap.js"></script>
         <script src="../../js/index.js"></script>
 
-        <?php include('../../header.php'); ?>
+        <?php 
+            $root_path = "../../";
+            include('../../header.php');
+        ?>
 
     </head>
 	

@@ -15,8 +15,9 @@
           <input type="password" name="pass_input" class="form-control" id="pass_input" placeholder="Password">
         </div>
         <input type="hidden" value="login" name="account_action">
-
-        <button type="submit" class="btn btn-default">Submit</button>
+        <?php if($login_error) echo "<p class='err_msg'>* we dont recognize this user or password</p>"; ?>
+        <button type="submit" class="btn btn-default" name="login_action" value="done">Close</button>
+        <button type="submit" class="btn btn-info" name="login_action" value="try">Submit</button>
       </form>
   </div>
 </div>
