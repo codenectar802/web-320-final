@@ -8,6 +8,8 @@ class User {
 	private $email;
 	private $joined;
 
+
+
 	// On construction the dbhandler will fill in the id and date joined
 	// this function alst takes params as a dict of keys which should 
 	// be named after the member variables and point to the desired value
