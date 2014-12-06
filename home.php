@@ -48,8 +48,8 @@
 			<div id="about-tab-pane" class="tab-pane">
 				<h2>This will be the about pane</h2>
 			</div>
-			<div id="matching-scores-tab-pane" class="tab-pane">
-				<h2>This will be the matching scores pane</h2>
+			<div id="hangman-scores-tab-pane" class="tab-pane">
+				<h2>This will be the hangman scores pane</h2>
 			</div>
 			<div id="math-scores-tab-pane" class="tab-pane">
 				<h2>This will be the math scores pane</h2>
