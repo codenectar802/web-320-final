@@ -1,20 +1,22 @@
 <?php
 
-
-class hangman extends userlife
+class hangman extends userlife 
 {
+	
 	public $guesses;				
 	public $letters = array();		
+	public $option;
 	public $Index;				
 	public $WLetters = array();	
 	public $wList = array();
-	public $difficulty = "Easy";
+	public $difficulty ;
 	public $alphabet = array( "a", "b", "c", "d", "e", "f", "g", "h","i", "j","k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
+	
 
 /*start game*/
 	public function hangman()
 	{
-		hangman::start();
+		userlife::start();
 	}
 	
 	/*changes difficulty options. Easy-Medium-Hard*/
@@ -34,22 +36,23 @@ class hangman extends userlife
 	}
 	public function newGame($max_guesses = 7)
 	{
-	
 /*starts game, clears gussed letters, sets guess limit*/
 		$this->start();
 		$this->letters = array();
 		if ($max_guesses)
 			$this->setGuesses($max_guesses);
-			
-		$this->setWord();
+			$this->setWord();
 	}
-	public function playGame()
+	
+	 public function playGame()
 	{
 		if (isset($_POST['change']) )
-			$this->changeDifficulty($_POST['difficulty']);	
-		if (isset($_POST['newgame']) || empty($this->wList))
+			$this->changeDifficulty($_POST['difficulty']);
+				
+		if (isset($_POST['newGame']) || empty($this->wList))
 			$this->newGame();
-		if ((!$this->isOver() && (isset($_POST['letter']))))
+			
+		if (!$this->isOver() && (isset($_POST['letter'])))
 			echo $this->guessLetter($_POST['letter']);
 				
 		$this->displayGame();
@@ -63,33 +66,36 @@ class hangman extends userlife
 	/*display game*/
 	public function displayGame()
 	{
+		 if (!$this->isOver())
+        
 		/*display guessed letters*/
 		  if (!empty($this->letters))
+		  
 					echo "<div id=\"guessedLetters\">Letters Guessed: " . implode($this->letters, ", ") . "</div>";
 		if (!$this->isOver())
 		{
 			echo "<div id=\"picture\">" . $this->picture() . "</div>
-				  <div id=\"guessWord\">" . $this->solvedWord() . "</div>
-				  <div id=\"selectLetter\">
-					Enter A Letter:
-						<input type=\"text\" name=\"letter\" value=\"\" maxlength=\"1\" />
-						<input type=\"submit\" name=\"submit\" value=\"Guess\" />
-				  </div>";
+			 <div id=\"guessWord\">" . $this->solvedWord() . "</div>
+			 <div id=\"selectLetter\">
+			 Enter A Letter:
+			 <input type=\"text\" name=\"letter\" value=\"\" maxlength=\"1\" />
+			 <input type=\"submit\" name=\"submit\" value=\"Guess\" />
+			 </div>";
 				  
 				/*choose difficulty*/
 					
 			echo "<div id=\"changeDifficulty\">
 					Difficulty:
 						<select name=\"difficulty\"/>
-<option value=\"1\">Easy</option>
+			<option value=\"1\">Easy</option>
+										
+			<option value=\"2\""; if ($this->difficulty == "Medium") echo " selected=\"selected\""; echo ">Medium</option>
+										
+			<option value=\"3\""; if ($this->difficulty == "Hard") echo " selected=\"selected\""; echo ">Hard</option>
 							
-<option value=\"2\""; if ($this->difficulty == "Medium") echo " selected=\"selected\""; echo ">Medium</option>
-							
-<option value=\"3\""; if ($this->difficulty == "Hard") echo " selected=\"selected\""; echo ">Hard</option>
-							
-						</select>
-						<input type=\"submit\" name=\"change\" value=\"Change\" />
-				  </div>";
+			</select>
+			<input type=\"submit\" name=\"change\" value=\"Change\" />
+			 </div>";
 		}
 		else
 		{
@@ -137,18 +143,18 @@ class hangman extends userlife
 			}
 		
 			//increase their score based on how many guesses they've used so far
-			if ($this->health > (100/floor($this->guesses/6)))
-				$this->setScore((6 * $multiplier));
-            else if ($this->health > (100/floor($this->guesses/5)))
-                $this->setScore((5 * $multiplier));
-			else if ($this->health > (100/floor($this->guesses/4)))
-				$this->setScore((4 * $multiplier));
-			else if ($this->health > (100/floor($this->guesses/3)))
-				$this->setScore((3 * $multiplier));
-			else if ($this->health > (100/floor($this->guesses/2)))
-				$this->setScore((2 * $multiplier));
-			else
-				$this->setScore((1 * $multiplier));
+	  if ($this->health > (100/floor($this->guesses/6)))
+		  $this->setScore((6 * $multiplier));
+	  else if ($this->health > (100/floor($this->guesses/5)))
+		  $this->setScore((5 * $multiplier));
+	  else if ($this->health > (100/floor($this->guesses/4)))
+		  $this->setScore((4 * $multiplier));
+	  else if ($this->health > (100/floor($this->guesses/3)))
+		  $this->setScore((3 * $multiplier));
+	  else if ($this->health > (100/floor($this->guesses/2)))
+		  $this->setScore((2 * $multiplier));
+	  else
+		  $this->setScore((1 * $multiplier));
 				
 			/*adds correct letter to array*/
 			array_push($this->letters, $letter);
@@ -157,7 +163,7 @@ class hangman extends userlife
 				 strtolower($this->wList[$this->Index]))
 				$this->won = true;
 			else
-				return success("Good guess, that's correct!");
+				return success("You guessed correctly!");
 		}
 		else 
 		{
@@ -184,25 +190,57 @@ class hangman extends userlife
 	/*selects words based on difficulty selected*/
 	public function loadWords()
 	{
-		$loop = mysqli_query("SELECT word FROM words WHERE difficulty='$this->difficulty' ORDER BY RAND()")
-			or die ('cannot load hangman words for this difficulty');
+$dbconnection=mysqli_connect("localhost", "root", "","web320final") or die ('cannot connect to DB');
+$connection= mysqli_select_db($dbconnection, "web320final");
+	
+		if (mysqli_connect_errno()) ;
+		{
+    echo "failed". mysqli_connect_error();
+	exit();
+		}
+		
+		$query= "SELECT word WHERE difficulty='$this->difficulty' ORDER BY RAND()";
+		$result = mysqli_query($connection, $query);
+		$data = mysqli_fetch_assoc($result);
+		array_push($this->wList, trim($data['word']));
+		}
+	}
+	
+		//if ($result = mysqli_query($link, "SELECT word * FROM web320final WHERE difficulty='$this->difficulty' ORDER BY RAND() ", MYSQLI_USE_RESULT)) {
+ 		//if (!mysqli_query($link, "SET @a:='this will not work'")) {
+    
+		//mysqli_free_result($result);
+		//}}
+		//$sql = "SELECT * FROM table_name";
+		//$result = mysql_query($sql);
+		//while ($data = mysqli_fetch_assoc($result))
+		//array_push($this->wList, trim($data['word']));
+		//mysqli_close($link);
+		/*
+		$loop = mysqli_query("
+		SELECT word
+		FROM web320final
+		WHERE difficulty='$this->difficulty'
+	    ORDER BY RAND()
+		LIMIT 1")
+		or die ('Cant connect to db');
 			
 		while ($data = mysqli_fetch_assoc($loop))
 			array_push($this->wList, trim($data['word']));
 	}
-	
+	*/
 	/*displays images*/
 
-	public function picture()
+
+	 function picture()
 	{
 		$count = 1;
-
 		for ($i = 100; $i >= 0; $i-= floor(100/$this->guesses))
 		{
 			if ($this->health == $i)
 			{
-				if (file_exists("images/" . ($count-1) . ".jpg"))
-					return "<img src=\"images/" . ($count-1) . ".jpg\" alt=\"Hangman\" title=\"Hangman\" />";
+			if (file_exists("images/" . ($count-1) . ".jpg"))
+			return "<img src=\"images/" . ($count-1) . ".jpg\" alt=\"Hangman\" title=\"Hangman\" />";
 			}
 				
 $count++;
@@ -212,7 +250,7 @@ $count++;
 	
 	/*display correctly guessed letters*/
 
-	public function solvedWord()
+	 function solvedWord()
 	{
 		$result = "";
 		for ($i = 0; $i < count($this->WLetters); $i++)
@@ -232,7 +270,7 @@ $count++;
 	}
 	
 	/*converts word to Array*/
-	public function wordToArray()
+	 function wordToArray()
 	{
 		$this->WLetters = array(); 
 		
@@ -241,10 +279,11 @@ $count++;
 	}
 	
 	/*checks if input is an alphabet letter */
-	public function isLetter($value)
+	 function isLetter($value)
 	{
 		if (in_array($value, $this->alphabet))
-			return true;
-			
+		return true;
 		return false;
-	}}
+	}
+	
+	?>

@@ -52,3 +52,5 @@ function success($msg)
 {
 	return "<div class=\"success\">$msg</div>";
 }
+
+?>
