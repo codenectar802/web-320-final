@@ -1,8 +1,8 @@
 .typing_game_container {
 	position: relative;
 	top: 15px;
-	height: 300px;
-	width: 70%;
+	height: auto;
+	width: 90%;
     margin: 0 auto;
 	background-color: #7A9A95;
 	-moz-border-radius: 15px;
@@ -18,15 +18,19 @@
 .stat_row div {
 	text-align: center;
 	font-size: 25px;
+    height: 10%
 }
 .timer_container {
 	color: #EF6D3B;
 
 }
-
+.heart_container {
+    color: #EF6D3B;
+    margin-right: 35px;
+}
 .target_text_container {
 	background-color: #90C5A9;
-	width: 550px;
+	width: 80%;
 	height: 125px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
@@ -34,12 +38,13 @@
 	border-color: #EF6D3B;
 	border-style: ridge;
     border-width: 5px;
+    font-size: 16px;
 }
 
 .user_typing_input_container {
 	margin-top: 20px;
 	background-color: #90C5A9;
-	width: 715px;
+	width: 100%;
 	height: 70px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
@@ -50,7 +55,7 @@
 }
 
 .user_typing_input_container input {
-	width: 675px;
+	width: 100%;
 	height: 35px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
@@ -150,5 +155,32 @@
     left: -10px;
     background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAA80lEQVRIie3VPU7DQBAG0LeOFfHT0OdwIIpcIwcIXICKgoKKivMEJKrYco+R7aWIsBIJQ7EbiYLpVit9TzOa1XLkCrDkYuAKJ5lyPwoe7qhKGLhecLsoyyzpVdd5ocDNV+J8UZYuVysSkRCCp/XapmlKGNNijNqmYTZLAoQg9v14HIEQo7auKYo0gO+BiPftlhCSwsNUB2LUVlUyALpuGoipHZgYEbR1LSbF72qYAmLfZwH2K31l/oE/DxxsUYYn9jOQ6zPYH8sBcJohPDicRLl/cXZMAM6PCAwVnjMA8LZDhhEouH+l2zDPAQS6GY85sn6tT+n5TTtSpqtiAAAAAElFTkSuQmCC") no-repeat left center transparent;
     background-size: 100% 100%;
+}
+
+.reset_button {
+  background: #3498db;
+  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+  background-image: -o-linear-gradient(top, #3498db, #2980b9);
+  background-image: linear-gradient(to bottom, #3498db, #2980b9);
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 42px 10px 42px;
+  text-decoration: none;
+}
+
+.reset_button:hover {
+  background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
 }
 
