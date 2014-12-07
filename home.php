@@ -1,3 +1,4 @@
+<?php include 'header_controller.php'; ?>
 
 
 <html>
@@ -9,12 +10,11 @@
     <script src="libs/bootstrap-3.2.0/js/bootstrap.js"></script>
     <script src="js/index.js"></script>
 
+    <?php include('header.php'); ?>
 
 </head>
 <body>
 	<div class="container">
-		<h1>Our Home Page change</h1>
-		<hr>
 		<div class="tabs-row">
 		    <ul class="nav nav-tabs tabs">
 		        <li class="active"><a href="#home-tab-pane" class="active">Home</a></li>                        
@@ -28,7 +28,15 @@
 
 		<div class="tab-content">
 			<div id="home-tab-pane" class="tab-pane active">
-				<h2>This will be the home pane</h2>
+				<div class="hangman_link game_link">
+					<h1>Hangman</h1>
+				</div>
+				<div class="typing_link game_link">
+					<h1>Typing</h1>
+				</div>
+				<div class="math_link game_link">
+					<h1>Math</h1>
+				</div>
 			</div>
 			<div id="about-tab-pane" class="tab-pane">
 				<h2>This will be the about pane</h2>

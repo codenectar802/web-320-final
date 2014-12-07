@@ -1,114 +1,130 @@
 <?php
 
+include "mathgame.php";
 
-//Generate argument variables
-$arg1=0;
-$arg2=0;
-//Generate opperator variables
-$oppindex=0;
-$opperators=array('+','-','*','/');
-//Generate answer variable
-$answer=0;
-//Generate gametype and modifer variables
-$gametype='';
-$mod='';
-//Generate score variables
-$right=0;
-$wrong=0;
-//Generate problem set variable
-$problemset=25;
-//Generate useranswer variable
-$useranswer="";
-
-//post action
-$post_action=$_POST['submit'];
-if ($post_action=='Start Game'){
-    ini_game();
-}elseif ($post_action=='Check Answer'){
-    check_answer();
-}
-
-//initialize the game
-function ini_game() {
-    global $arg1,$opperators,$oppindex,$arg2,$answer,$gametype,$mod;
-    $gametype=$_POST['gametype'];
-    $mod=$_POST['mod'];
-    //check modifier
-    if ($mod=='race'){
-        //race timer
-    }elseif ($mod=='set'){
-        //problem set
-    }else{
-        //error
-        echo "<h3>Error choose a game modifier</h3>";
+session_start();
+if (!isset($_SESSION['math_game'])) {
+    $game = new mathgame(null);
+    if ((isset($_POST['gametype']))&&(isset($_POST['mod']))){
+        $gt=$_POST['gametype'];
+        $m=$_POST['mod'];
+        $data = array('arg1'=>0,'arg2'=>0,'oppindex'=>0,'answer'=>0,'gametype'=>$gt,'mod'=>$m,'gametype'=>$gt,'right'=>0,'wrong'=>0,'useranswer'=>0,'problemset'=>25);
+        $game = new mathgame($data);
+        play_turn($game);
+        $_SESSION['math_game'] = $game;
+    } else {
+        game_options();
+    }
+}elseif(isset($_POST['math_action'])){
+    
+    $game = $_SESSION['math_game'];
+    switch ($_POST['math_action']){
+        case 'check_answer':
+            check_answer($game);
+            $_SESSION['math_game'] = $game;
+            break;
+        case 'end_game' :
+            game_options();
+            break;
     }
     
-    gen_problem($arg1,$opperators[$oppindex],$arg2,$answer);
-    solve_problem($arg1,$opperators[$oppindex],$arg2,$answer);
-    display_problem($arg1,$opperators[$oppindex],$arg2,$answer,$gametype);
+} else {
+    if ((isset($_POST['gametype']))&&(isset($_POST['mod']))){
+        $gt=$_POST['gametype'];
+        $m=$_POST['mod'];
+        $data = array('arg1'=>0,'arg2'=>0,'oppindex'=>0,'answer'=>0,'gametype'=>$gt,'gametype'=>$gt,'right'=>0,'wrong'=>0,'useranswer'=>0,'problemset'=>$m);
+        $game = new mathgame($data);
+        play_turn($game);
+        $_SESSION['math_game'] = $game;
+    } else {
+        game_options();
+    }
+    $game = $_SESSION['math_game'];
+}
+
+
+function game_options(){
+    $output = "";
+    $output .= "<div id='options'>";
+    $output .= "<form action='math.php' method='POST'>";
+    $output .= "<h1>Math Game</h1>";
+    $output .= "<h3>Solve for either:</br></h3>";
+    $output .= "<input type='radio' name='gametype' value='op'>The Operator</br>";
+    $output .= "<input type='radio' name='gametype' value='ans'>The Answer</br>";
+    $output .= "<h3>How many problems:</br></h3>";
+    $output .= "<input type='radio' name='mod' value='25'>25</br>";
+    $output .= "<input type='radio' name='mod' value='50'>50</br>";
+    $output .= "<input type='submit' name='Start Game' value='Start Game'></br>";
+    $output .= "</form>";
+    $output .= "</div>";
+    echo $output;
+}
+
+
+//initialize the game
+function play_turn($game) {
+    //gen_problem($game->arg1,$game->opperators,$game->oppindex,$game->arg2,$game->answer);
+    gen_problem($game);
+    solve_problem($game);
+    display_problem($game);
+    return $game;
     
 }
  
-function gen_problem(){
-    global $arg1,$oppindex,$arg2,$answer;
+function gen_problem($game){
     //Random arguments
-    $arg1=rand(1,10);
-    $arg2=rand(1,10);
+    $game->arg1=rand(1,10);
+    $game->arg2=rand(1,10);
     //Random opperator 
-    $oppindex=rand(0,3);
-    //Reset answer before solve
-    $answer=0;
+    $game->oppindex=rand(0,3);
+    return $game;
 }
 
-function solve_problem(){
-    global $arg1,$opperators,$oppindex,$arg2,$answer;
+function solve_problem($game){
     //solve the problem
-    switch ($opperators[$oppindex]){
+    switch ($game->opperators[$game->oppindex]){
         case '+':
-            $answer=($arg1 + $arg2);
+            $game->answer=($game->arg1 + $game->arg2);
+            return $game;
             break;
         case '-':
-            $answer=($arg1 - $arg2);
+            $game->answer=($game->arg1 - $game->arg2);
+            return $game;
             break;
         case '*':
-            $answer=($arg1 * $arg2);
+            $game->answer=($game->arg1 * $game->arg2);
+            return $game;
             break;
         case '/':
-            $arg1=$arg1*$arg2;
-            $answer=($arg1 / $arg2);
+            $game->arg1=$game->arg1*$game->arg2;
+            $game->answer=($game->arg1 / $game->arg2);
+            return $game;
             break;
     } 
 }
 
-function display_problem(){
-    global $arg1,$opperators,$oppindex,$arg2,$answer,$gametype,$mod,$post_action;
-    //echo $arg1;
-    //echo $opperators[$oppindex];
-    //echo $arg2;
-    //echo " = ";
-    //echo $answer;
-    //echo $gametype;
-    //echo $mod;
-    //check gametype
-    if ($gametype=='op'){
+function display_problem($game){
+    if ($game->gametype=='op'){
         //operator
         $output = "<div id='gamewindow'>";
         $output .= "<form method='post'>";
-        $output .= "<h1>Guess the Opperator!</h1></br>";
-        $output .= "<h2>$arg1 ? $arg2 = $answer</h2></br>";
+        $output .= "<h1>Guess the Operator!</h1></br>";
+        $output .= "<h2>".$game->arg1." ? ".$game->arg2." = ".$game->answer."</h2></br>";
         $output .= "<h3>Your answer?</h3></br>";
+        $output .= "<input type='hidden' name='math_action' value='check_answer'>";
         $output .= "<input type='text' name='answer'></br></br>";
         $output .= "<input type='submit' name='submit' value='Check Answer'></br>";
         $output .= "</form>";
         $output .= "</div>";
         echo $output;
-    }elseif ($gametype=='ans'){
+    }elseif ($game->gametype=='ans'){
         //answer
         $output = "<div id='gamewindow'>";
         $output .= "<form method='post'>";
         $output .= "<h1>Guess the Answer!</h1></br>";
-        $output .= "<h2>$arg1 $opperators[$oppindex] $arg2 = ?</h2></br>";
+        $output .= "<h2>".$game->arg1." ".$game->opperators[$game->oppindex]." ".$game->arg2." = ?</h2></br>";
         $output .= "<h3>Your answer?</h3></br>";
+        $output .= "<input type='hidden' name='math_action' value='check_answer'>";
         $output .= "<input type='text' name='answer'></br></br>";
         $output .= "<input type='submit' name='submit' value='Check Answer'></br>";
         $output .= "</form>";
@@ -121,45 +137,61 @@ function display_problem(){
     
 }
 
-function check_answer(){
+function check_answer($game){
     //check the answer
-    global $arg1,$opperators,$oppindex,$arg2,$answer,$gametype,$right,$wrong,$useranswer,$post_action;
-    if ($gametype=='op'){
+    if ($game->gametype=='op'){
         //operator
         $output = "<div id='gamewindow'>";
         $output .= "<form method='post'>";
-        if ($useranswer==$opperators[$oppindex]){
-            $right++;
+        $game->useranswer = $_POST['answer'];
+        if ($game->useranswer==$game->opperators[$game->oppindex]){
+            $game->right++;
         }else{
-            $wrong++;
+            $game->wrong++;
         }
-        $output .= "<h3>Your score: [$right]Right [$wrong]:Wrong out of [$problemset]:Questions</h3>";
-        $output .= "<h1>Guess the Opperator!</h1></br>";
-        $output .= "<h2>$arg1 ? $arg2 = $answer</h2></br>";
-        $output .= "<h3>Your answer?</h3></br>";
-        $output .= "<input type='text' name='answer'></br></br>";
-        $output .= "<input type='submit' name='submit' value='Check Answer' onclick='check_answer()'></br>";
-        $output .= "</form>";
-        $output .= "</div>";
+        $output .= "<h3>Your score: [$game->right]:Right [$game->wrong]:Wrong out of [$game->problemset]:Questions</h3>";
         echo $output;
-    }elseif ($gametype=='ans'){
+        if ($game->mod=='50'){
+            if(($game->right+$game->wrong)==50){
+                game_over($game);
+            }else{
+                play_turn($game);
+            }
+        }else{
+            if(($game->right+$game->wrong)==25){
+                game_over($game);
+            }else{
+                play_turn($game);
+            }
+        }
+        
+        
+    }elseif ($game->gametype=='ans'){
         //answer
         $output = "<div id='gamewindow'>";
         $output .= "<form method='post'>";
-        if ($useranswer==$answer){
-            $right++;
+        $game->useranswer = $_POST['answer'];
+        if ($game->useranswer==$game->answer){
+            $game->right++;
         }else{
-            $wrong++;
+            $game->wrong++;
         }
-        $output .= "<h3>Your score: [$right]Right [$wrong]:Wrong out of [$problemset]:Questions</h3>";
-        $output .= "<h1>Guess the Answer!</h1></br>";
-        $output .= "<h2>$arg1 $opperators[$oppindex] $arg2 = ?</h2></br>";
-        $output .= "<h3>Your answer?</h3></br>";
-        $output .= "<input type='text' name='answer'></br></br>";
-        $output .= "<input type='submit' name='submit' value='Check Answer' onclick='check_answer()'></br>";
-        $output .= "</form>";
-        $output .= "</div>";
+        $output .= "<h3>Your score: [$game->right]Right [$game->wrong]:Wrong out of [$game->problemset]:Questions</h3>";
         echo $output;
+        if ($game->mod=='50'){
+            if(($game->right+$game->wrong)==50){
+                game_over($game);
+            }else{
+                play_turn($game);
+            }
+        }else{
+            if(($game->right+$game->wrong)==25){
+                game_over($game);
+            }else{
+                play_turn($game);
+            }
+        }
+        
     }else{
         //error
         echo "<h3>Error choose a gametype</h3>";
@@ -167,25 +199,17 @@ function check_answer(){
     
 }
 
-function display_modifier(){
-    //displays up top either:
-    //timer for race
-    //our question number out of $problem set
+
+function game_over($game){
+    $output = "";
+    $output .= "<form method='post'>";
+    $output .= "<h3>Your Final score: [$game->right]Right [$game->wrong]:Wrong out of [$game->problemset]:Questions</h3>";
+    $output .= "<input type='hidden' name='math_action' value='end_game'>";
+    $output .= "<input type='submit' name='submit' value='Reset Game'></br>";
+    $output .= "</form>";
+    echo $output;
 }
 
-function game(){
-    //determine success criteria
-    //check modifier
-    if ($mod=='race'){
-        //race timer
-        //when timer reaches zero game over
-        //display game over screen with score
-        //display play again button, reloads math.html
-    }elseif ($mod=='set'){
-        //problem set
-        //if problemsdisplayed is more than problem set game over
-        //display game over screen with score
-        //display play again button, reloads math.html
-    }
-}
+
+
 ?>
