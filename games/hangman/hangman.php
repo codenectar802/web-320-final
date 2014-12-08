@@ -1,23 +1,21 @@
 <?php
-function __autoload($userlife){
-include $userlife . 'userlife.php';
-}
+
 class hangman
 {
+	public $alphabet = array( "a", "b", "c", "d", "e", "f", "g", "h","i", "j","k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
 	public $health;
 	public $over = False;		
 	public $score;		
 	public $won;
-
 	public $guesses = 7;				
-	public $letters = array();
 	public $option;
-	public $Index;				
+	public $isOver;
+	public $Index;		
+	public $letters = array();	
 	public $WLetters = array();	
 	public $wList = array();
 	public $difficulty = 'Easy';
-	public $alphabet = array( "a", "b", "c", "d", "e", "f", "g", "h","i", "j","k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
-	
+
 
 	public function __construct($params) {
 		if ($params){
@@ -27,14 +25,44 @@ class hangman
 		}
 	}
 
-
-
 	public function newGame()
 	{
 		$this->setWord();
+		$this->isOver();
+		$this->score = 0;
+		$this->health = 100;
+		$this->over = false;
+		$this->won = false;
+	}
+	
+	public function end()
+	{
+	$this->over = true;
+	}
+	
+	
+	public function setScore($amount = 0)
+	{
+	return $this->score += $amount;
+	}
+	
+	public function setHealth($amount = 0)
+	{			
+	return floor($this->health += $amount);
 	}
 
-	/*selects random word from database*/
+	
+	public function isOver()
+	{
+		if ($this->won)
+			return true;
+		if ($this->over)
+			return true;
+		if ($this->health < 0) 
+			return true;	
+		return false;
+	}
+
 	public function setWord() {
 		/*loads and converts word list*/
 		if (empty($this->wList)) {
@@ -46,15 +74,14 @@ class hangman
 	}
 
 
-
 	public function loadWords()
 	{
-		$dbconnection=mysqli_connect("localhost", "root", "rastacrise92","web320final") or die ('cannot connect to DB');
+		$dbconnection=mysqli_connect("localhost", "root", "","web320final") or die ('cannot connect to DB');
 		
 		$query = "SELECT * FROM words WHERE difficulty = '".$this->difficulty."' ORDER BY RAND();";
 
 		if ($result = mysqli_query($dbconnection, $query)){
-		while ($data=mysqli_fetch_assoc($result));
+		while ($data=mysqli_fetch_assoc($result))
 			array_push($this->wList, trim($data['word']));
 		}
 	}
@@ -66,7 +93,7 @@ class hangman
 		if (isset($_POST['newGame']) || empty($this->wList))
 			$this->newGame();
 			
-		if (!$this->over && (isset($_POST['letter'])))
+		if (!$this->isOver && (isset($_POST['letter'])))
 			echo $this->guessLetter($_POST['letter']);
 				
 		$this->displayGame();
@@ -81,7 +108,7 @@ class hangman
 		  if (!empty($this->letters))
 		  
 					echo "<div id=\"guessedLetters\">Letters Guessed: " . implode($this->letters, ", ") . "</div>";
-		if (!$this->over)
+		if (!$this->isOver)
 		{
 			echo "<div id=\"picture\">" . $this->picture() . "</div>
 			 <div id=\"guessWord\">" . $this->solvedWord() . "</div>
@@ -139,32 +166,21 @@ class hangman
 	}
  // END CLASS DEFF
 
-	function setHealth($amount = 0)
-	{			
-	return floor($this->health += $amount);
-	}
-
 
 	/*letter guessing*/
 	
 	public function guessLetter($letter)
 	{			
 
-		if ($this->over)
+		if ($this->isOver)
 			return;
-
 		if (!is_string($letter) || strlen($letter) != 1 || !$this->isLetter($letter))
 			return fail("You have not entered a letter.");
-			
 /* checks for guessed letter*/
 		if (in_array($letter, $this->letters))
 			return fail("You have already guessed this letter.");
-			
-
-			
 		if (!(strpos($this->wList[$this->Index], $letter) === false))
 		{
-		
 			/*difficulities*/
 			switch ($this->difficulty)
 			{
@@ -173,6 +189,7 @@ class hangman
 				case "Medium": $multiplier = 2; break;
 				case "Hard": $multiplier = 3; break;
 			}
+			
 		
 			//increase their score based on how many guesses they've used so far
 	  if ($this->health > (100/floor($this->guesses/6)))
@@ -197,24 +214,17 @@ class hangman
 			else
 				return success("You guessed correctly!");
 		}
+		
 		else 
 		{
 			$this->setHealth(floor(100/$this->guesses) * -1);
 			array_push($this->letters, $letter);
 			
-			if ($this->over)
+			if ($this->isOver)
 			return;
 			else return fail("There is no $letter in this word.");
 		}
 	}
-	
-
-	
-	/*selects words based on difficulty selected*/
-	
-	
-		
-	/*displays images*/
 
 
 	public function picture()
@@ -232,6 +242,7 @@ $count++;
 		}
 		return "<img src=\"images/" . ($count-1) . ".jpg\" alt=\"Hangman\" title=\"Hangman\" />";
 	}
+	
 	
 	/*display correctly guessed letters*/
 
@@ -254,6 +265,7 @@ $count++;
 		return $result;
 	}
 	
+	
 	/*converts word to Array*/
 	public function wordToArray()
 	{
@@ -271,10 +283,17 @@ $count++;
 		return false;
 	}
 
-
-
 }
 
+ function fail($msg)
+{
+return "<div class=\"fail\">$msg</div>";
+}
+
+ function success($msg)
+{
+	return "<div class=\"success\">$msg</div>";
+}
 
 
 	
