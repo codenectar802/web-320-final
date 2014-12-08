@@ -1,16 +1,19 @@
-body {
-	margin: auto;
-	padding: 10px;
-	font-size: 12px;
-	
-}
-.typing_game_container {
+
+.hangman_game_container {
 	position: relative;
 	top: 15px;
-	height: 70%;
+	height: 300px;
 	width: 70%;
     margin: 0 auto;
-	background-color: #3F2860;
+	background-color: #7A9A95;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	padding: 15px;
+
+	
+	border-color: #EF6D3B;
+	border-style: double;
+    border-width: 5px;
 }
 
 h2 {
