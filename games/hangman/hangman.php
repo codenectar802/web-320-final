@@ -2,46 +2,86 @@
 function __autoload($userlife){
 include $userlife . 'userlife.php';
 }
-class hangman 
+class hangman
 {
-	public $guesses;				
-	public $letters = array();		
+	public $health;
+	public $over = False;		
+	public $score;		
+	public $won;
+
+	public $guesses = 7;				
+	public $letters = array();
 	public $option;
 	public $Index;				
 	public $WLetters = array();	
 	public $wList = array();
-	public $difficulty ;
+	public $difficulty = 'Easy';
 	public $alphabet = array( "a", "b", "c", "d", "e", "f", "g", "h","i", "j","k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
 	
-	public function startGame()
-	{
-		
-		userlife::start();
-	}}
 
-	 function playGame()
+	public function __construct($params) {
+		if ($params){
+			foreach ($params as $key => $value) {
+				$this->{$key} = $value;
+			}
+		}
+	}
+
+
+
+	public function newGame()
 	{
+		$this->setWord();
+	}
+
+	/*selects random word from database*/
+	public function setWord() {
+		/*loads and converts word list*/
+		if (empty($this->wList)) {
+			$this->loadWords();
+		}
+		if (!empty($this->wList))
+			$this->Index = rand(0, count($this->wList)-1);
+			$this->wordToArray();
+	}
+
+
+
+	public function loadWords()
+	{
+		$dbconnection=mysqli_connect("localhost", "root", "rastacrise92","web320final") or die ('cannot connect to DB');
+		
+		$query = "SELECT * FROM words WHERE difficulty = '".$this->difficulty."' ORDER BY RAND();";
+
+		if ($result = mysqli_query($dbconnection, $query)){
+		while ($data=mysqli_fetch_assoc($result));
+			array_push($this->wList, trim($data['word']));
+		}
+	}
+
+	public function playGame() {
 		if (isset($_POST['change']) )
 			$this->changeDifficulty($_POST['difficulty']);
 				
 		if (isset($_POST['newGame']) || empty($this->wList))
 			$this->newGame();
 			
-		if (!$this->isOver() && (isset($_POST['letter'])))
+		if (!$this->over && (isset($_POST['letter'])))
 			echo $this->guessLetter($_POST['letter']);
 				
 		$this->displayGame();
 	}
 
-	 function displayGame()
+
+	public function displayGame()
 	{
-		 if (!$this->isOver())
+		 if (!$this->over)
         
 		/*display guessed letters*/
 		  if (!empty($this->letters))
 		  
 					echo "<div id=\"guessedLetters\">Letters Guessed: " . implode($this->letters, ", ") . "</div>";
-		if (!$this->isOver())
+		if (!$this->over)
 		{
 			echo "<div id=\"picture\">" . $this->picture() . "</div>
 			 <div id=\"guessWord\">" . $this->solvedWord() . "</div>
@@ -83,7 +123,7 @@ class hangman
 	}
 
 	/*changes difficulty options. Easy-Medium-Hard*/
-	 function changeDifficulty($option)
+	public function changeDifficulty($option)
 	{		
 		switch ($option)
 		{
@@ -99,53 +139,18 @@ class hangman
 	}
  // END CLASS DEFF
 
-/*start game*/
-	
+	function setHealth($amount = 0)
+	{			
+	return floor($this->health += $amount);
+	}
 
-	 function newGame($max_guesses = 7)
-	{
-	/*starts game, clears gussed letters, sets guess limit*/
-		$this->start();
-		$this->letters = array();
-		if ($max_guesses)
-			$this->setGuesses($max_guesses);
-			$this->setWord();
-	}
-	
-	 function loadWords()
-	{
-$dbconnection=mysqli_connect("localhost", "root", "rastacrise92","web320final") or die ('cannot connect to DB');
- $connection= mysqli_select_db($dbconnection, "web320final");
-	
-		// if (mysqli_connect_errno()) ;
-		// {
-  //   		echo "Can't connect to database". mysqli_connect_error();
-		// 	exit();
-		// }
-		
-		$query= "SELECT words * FROM web320final WHERE difficulty='$this->difficulty' ORDER BY RAND()";
-		if ($result = mysqli_query($connection, $query)){
-		while ($data=mysqli_fetch_assoc($result));
-		array_push($this->wList, trim($data['word']));
-		}
-	}
-	
-	 
-	/*set guesses*/
-	 function setGuesses($amount = 0)
-	{		
-		$this->guesses = $amount;
-	}
-	
-	/*display game*/
-	
-	
+
 	/*letter guessing*/
 	
-	 function guessLetter($letter)
+	public function guessLetter($letter)
 	{			
 
-		if ($this->isOver())
+		if ($this->over)
 			return;
 
 		if (!is_string($letter) || strlen($letter) != 1 || !$this->isLetter($letter))
@@ -197,22 +202,13 @@ $dbconnection=mysqli_connect("localhost", "root", "rastacrise92","web320final") 
 			$this->setHealth(floor(100/$this->guesses) * -1);
 			array_push($this->letters, $letter);
 			
-			if ($this->isOver())
+			if ($this->over)
 			return;
 			else return fail("There is no $letter in this word.");
 		}
 	}
 	
-/*selects random word from database*/
-	 function setWord()
-	{
-/*loads and converts word list*/
-		if (empty($this->wList))
-			$this->loadWords();
-			if (!empty($this->wList))
-			$this->Index = rand(0, count($this->wList)-1);
-			$this->wordToArray();
-	}
+
 	
 	/*selects words based on difficulty selected*/
 	
@@ -221,7 +217,7 @@ $dbconnection=mysqli_connect("localhost", "root", "rastacrise92","web320final") 
 	/*displays images*/
 
 
-	 function picture()
+	public function picture()
 	{
 		$count = 1;
 		for ($i = 100; $i >= 0; $i-= floor(100/$this->guesses))
@@ -239,7 +235,7 @@ $count++;
 	
 	/*display correctly guessed letters*/
 
-	 function solvedWord()
+	public function solvedWord()
 	{
 		$result = "";
 		for ($i = 0; $i < count($this->WLetters); $i++)
@@ -253,27 +249,32 @@ $count++;
 				}}
 			
 			if (!$found && $this->isLetter($this->WLetters[$i]))
-				$result .= "_  "; 
+				$result = $result . "_  "; 
 		}
 		return $result;
 	}
 	
 	/*converts word to Array*/
-	 function wordToArray()
+	public function wordToArray()
 	{
-		$this->WLetters = array(); 
+		$this->WLetters = array();
 		
 		for ($i = 0; $i < strlen($this->wList[$this->Index]); $i++)
 			array_push($this->WLetters, $this->wList[$this->Index][$i]);
 	}
 	
 	/*checks if input is an alphabet letter */
-	 function isLetter($value)
+	public function isLetter($value)
 	{
 		if (in_array($value, $this->alphabet))
 		return true;
 		return false;
 	}
+
+
+
+}
+
 
 
 	

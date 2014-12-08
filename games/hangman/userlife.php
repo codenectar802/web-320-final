@@ -8,8 +8,9 @@ class userlife {
 	public $game;
 
 
-	 function __construct(){
-	 }
+	function __construct() {
+		
+	}
 	 function hangman()
 	{
 		$this->score = 0;

@@ -1,14 +1,15 @@
 
 
 <?php
+
+include '../../header_controller.php';
+
 require_once 'hangman.php';
 require_once 'userlife.php';
-include '../../header_controller.php';
+
 $dbconnection=mysqli_connect("localhost", "root", "rastacrise92","web320final") or die ('cannot connect to DB');
 $connection= mysqli_select_db($dbconnection, "words");
- if (!session_id()) session_start();
-    // if (!$_SESSION['userlife']['hangman'])
-    // $_SESSION['userlife']['hangman'] = new hangman();
+
 ?>
 
 
@@ -27,9 +28,32 @@ $connection= mysqli_select_db($dbconnection, "words");
             include('../../header.php');
         ?>
 
+
+<?php 
+
+    // if userlife is stored in the session
+    if (isset($_SESSION['hangman_game'])) {
+        $game = $_SESSION['hangman_game'];
+    } else { // if the user life is not stored in the session
+        $game = new hangman(null);
+        $game->newGame();
+    }
+
+
+
+
+
+?>
+
+
+
+
     </head>
 	
     <body>
+
+
+    <?php echo var_dump($game) ?>
     <div class="container">
     <div class="tabs-row">
         <ul class="nav nav-tabs tabs">
@@ -43,16 +67,10 @@ $connection= mysqli_select_db($dbconnection, "words");
         <div id="game-pane" class="tab-pane active">
             <div class="typing_game_container">
                <div id="content">
-		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" 	method="POST"> 
+		<form action="" method="POST"> 
 		<h2>Hangman</h2>
 		<?php
-        $hangman = $_SESSION['hangman'] ;
-        $hangman->playGame($_POST);
-        // $_SESSION ['hangman'] = $userlife ['userlife']
-        //   $_SESSION['userlife']['hangman']->playGame($_POST);
-         // $_SESSION['userlife'] = new hangman();
-        $_SESSION['hangman']->playGame($_POST)
-
+            $game->playGame();
         ?>
 		</form>
 		</div>
