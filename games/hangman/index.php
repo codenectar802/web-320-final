@@ -1,35 +1,24 @@
-<?php include '../../header_controller.php'; ?>
+
 
 <?php
 
-require_once('userlife.php');
-require_once('hangman.php');
-$dbconnection=mysqli_connect("localhost", "root", "root","web320final") or die ('cannot connect to DB');
-$connection=mysqli_select_db($dbconnection, "hangman_words");
+include '../../header_controller.php';
 
-    // If session variable does not exits
-    if(!isset($_SESSION['userlife']['hangman'])) {
-        // Start new game instance
-        $game = new hangman();
-    } else {
-        // if session variable is not null and is initialized
-        if ($_SESSION['userlife']['hangman']) {
-            // set game instance from session variable
-            $game = $_SESSION['userlife']['hangman']; 
-        } else {
-            $_SESSION['userlife']['hangman'] = new hangman();
-        }       
-    }
+require_once 'hangman.php';
+require_once 'userlife.php';
 
+$dbconnection=mysqli_connect("localhost", "root", "rastacrise92","web320final") or die ('cannot connect to DB');
+$connection= mysqli_select_db($dbconnection, "words");
 
 ?>
+
 
 <html>
 	<head>
 		<title>Hangman</title>
-        <link rel="stylesheet" type="text/css" href="../../libs/bootstrap-3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="style.css">
-        <link rel="stylesheet" type="text/css" href="css/typing.css">
+        <link rel="stylesheet" type="text/css" href="../../libs/bootstrap-3.2.0/css/bootstrap.min.css">
+        
         <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script src="../../libs/bootstrap-3.2.0/js/bootstrap.js"></script>
         <script src="../../js/index.js"></script>
@@ -39,9 +28,32 @@ $connection=mysqli_select_db($dbconnection, "hangman_words");
             include('../../header.php');
         ?>
 
+
+<?php 
+
+    // if userlife is stored in the session
+    if (isset($_SESSION['hangman_game'])) {
+        $game = $_SESSION['hangman_game'];
+    } else { // if the user life is not stored in the session
+        $game = new hangman(null);
+        $game->newGame();
+    }
+
+
+
+
+
+?>
+
+
+
+
     </head>
 	
     <body>
+
+
+    <?php echo var_dump($game) ?>
     <div class="container">
     <div class="tabs-row">
         <ul class="nav nav-tabs tabs">
@@ -55,13 +67,11 @@ $connection=mysqli_select_db($dbconnection, "hangman_words");
         <div id="game-pane" class="tab-pane active">
             <div class="typing_game_container">
                <div id="content">
-		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+		<form action="" method="POST"> 
 		<h2>Hangman</h2>
 		<?php
-            if(isset($game)) {
-                $game->playGame();
-            }
-		?>
+            $game->playGame();
+        ?>
 		</form>
 		</div>
             </div>
@@ -101,6 +111,5 @@ $connection=mysqli_select_db($dbconnection, "hangman_words");
 	</body>
 </html>
 
-<?php $_SESSION['userlife']['hangman'] = serialize($game); ?>
 
 
