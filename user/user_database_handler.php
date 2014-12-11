@@ -9,7 +9,7 @@ class User_Database_Handler {
 	public function __construct() {
 		$servername = "localhost";
 		$username = "root";
-		$password = "rastacrise92";
+		$password = "";
 		$dbname = "web320final";
 		$link = new mysqli($servername, $username, $password, $dbname);
 		// Check connection

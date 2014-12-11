@@ -7,7 +7,7 @@ class Typing_Database_Handler {
 	public function __construct() {
 		$servername = "localhost";
 		$username = "root";
-		$password = "root";
+		$password = "";
 		$dbname = "web320final";
 		$link = new mysqli($servername, $username, $password, $dbname);
 		// Check connection
