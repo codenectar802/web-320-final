@@ -1,9 +1,6 @@
-
 <?php
 include '../../header_controller.php';
-require_once 'hangmanGame.php';
-;
-$dbconnection=mysqli_connect("localhost", "root", "","web320final") or die ('cannot connect to DB');
+$dbconnection=mysqli_connect("localhost", "root", "root","web320final") or die ('cannot connect to DB');
 $connection= mysqli_select_db($dbconnection, "words");
 ?>
 
@@ -21,6 +18,7 @@ $connection= mysqli_select_db($dbconnection, "words");
         <?php 
             $root_path = "../../";
             include('../../header.php');
+            include 'hangmanGame.php';
         ?>
 
 

@@ -81,7 +81,7 @@ class hangman
 	//Gets word from Database
 	public function loadWords()
 	{
-		$dbconnection=mysqli_connect("localhost", "root", "","web320final") or die ('cannot connect to DB');
+		$dbconnection=mysqli_connect("localhost", "root", "root","web320final") or die ('cannot connect to DB');
 		
 		$query = "SELECT * FROM words WHERE difficulty = '".$this->difficulty."' ORDER BY RAND();";
 		if ($result = mysqli_query($dbconnection, $query)){
