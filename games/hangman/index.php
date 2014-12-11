@@ -7,15 +7,20 @@ require_once('hangman.php');
 $dbconnection=mysqli_connect("localhost", "root", "root","web320final") or die ('cannot connect to DB');
 $connection=mysqli_select_db($dbconnection, "hangman_words");
 
-    if(isset($_SESSION['userlife']['hangman'])) {
-        if (!$_SESSION['userlife']['hangman']) {
-        	$_SESSION['userlife']['hangman'] = new hangman();
-        } else {
-
-        }
+    // If session variable does not exits
+    if(!isset($_SESSION['userlife']['hangman'])) {
+        // Start new game instance
+        $game = new hangman();
     } else {
-        $_SESSION['userlife']['hangman'] = new hangman();
+        // if session variable is not null and is initialized
+        if ($_SESSION['userlife']['hangman']) {
+            // set game instance from session variable
+            $game = $_SESSION['userlife']['hangman']; 
+        } else {
+            $_SESSION['userlife']['hangman'] = new hangman();
+        }       
     }
+
 
 ?>
 
@@ -29,7 +34,10 @@ $connection=mysqli_select_db($dbconnection, "hangman_words");
         <script src="../../libs/bootstrap-3.2.0/js/bootstrap.js"></script>
         <script src="../../js/index.js"></script>
 
-        <?php include('../../header.php'); ?>
+        <?php 
+            $root_path = "../../";
+            include('../../header.php');
+        ?>
 
     </head>
 	
@@ -50,8 +58,8 @@ $connection=mysqli_select_db($dbconnection, "hangman_words");
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 		<h2>Hangman</h2>
 		<?php
-            if(isset($_SESSION['userlife']['hangman'])) {
-			     $_SESSION['userlife']['hangman']->playGame($_POST);
+            if(isset($game)) {
+                $game->playGame();
             }
 		?>
 		</form>
@@ -93,5 +101,6 @@ $connection=mysqli_select_db($dbconnection, "hangman_words");
 	</body>
 </html>
 
+<?php $_SESSION['userlife']['hangman'] = serialize($game); ?>
 
 

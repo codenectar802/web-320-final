@@ -34,7 +34,7 @@ class Login_Manager {
 		return False;
 	}
 
-	function check_if_available($username, $email) {
+	public function check_if_unavailable($username, $email) {
 		$username_available = True;
 		$email_available = True;
 		if ($this->user_dbhandler->get_user_by_username($_POST['username_input'])==null){

@@ -1,0 +1,90 @@
+.score_container {
+	position: relative;
+	top: 15px;
+	height: 650px;
+	width: 80%;
+	margin: 0 auto;
+	background-color: #3F2860;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	padding: 15px;
+	border-color: #EF6D3B;
+	border-style: double;
+	border-width: 5px;
+	text-align: center;
+	color: #fff;
+}
+
+.math_game_container {
+	position: relative;
+	top: 15px;
+	height: 475px;
+	width: 80%;
+	margin: 0 auto;
+	background-color: #7A9A95;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	padding: 15px;
+	border-color: #EF6D3B;
+	border-style: double;
+	border-width: 5px;
+	text-align: center;
+	color: #fff;
+}
+
+.target_text_container {
+	background-color: #90C5A9;
+	width: 450px;
+	height: 75px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	padding: 10px;
+	border-color: #EF6D3B;
+	border-style: ridge;
+	border-width: 5px;
+	font-size: 36px;
+	color: #fff;
+}
+
+.options_container {
+	position: relative;
+	height: 150px;
+	width: 45%;
+	margin: 10px auto;
+	background-color: #EF6D3B;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	padding: 10px;
+	border-color: #3F3860;
+	border-style: double;
+	border-width: 5px;
+	text-align: left;
+	align-content: center;
+	color: #fff;
+}
+
+.equation_container {
+	position: relative;
+	height: 90px;
+	width: 45%;
+	margin: 10px auto;
+	background-color: #EF6D3B;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	padding: 10px;
+	border-color: #3F3860;
+	border-style: double;
+	border-width: 5px;
+	text-align: center;
+	align-content: center;
+	color: #fff;
+}
+
+input[type=submit] {
+	border: 1px solid #EF6D3B;
+	color: #fff;
+	margin: 10px 25px;
+	background: #3F2860;
+	padding: 10px;
+	border-radius: 3px;
+}

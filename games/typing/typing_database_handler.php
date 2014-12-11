@@ -19,7 +19,9 @@ class Typing_Database_Handler {
 		$this->link = $link;
 	}
 
-	public 
+	public function store_score() {
+		
+	}
 }
 
 ?>

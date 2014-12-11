@@ -3,22 +3,22 @@
 
 class hangman extends userlife
 {
-	var $guesses;				
-	var $letters = array();		
-	var $Index;				
-	var $WLetters = array();	
-	var $wList = array();
-	var $difficulty = "Easy";
-	var $alphabet = array( "a", "b", "c", "d", "e", "f", "g", "h","i", "j","k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
+	public $guesses;				
+	public $letters = array();		
+	public $Index;				
+	public $WLetters = array();	
+	public $wList = array();
+	public $difficulty = "Easy";
+	public $alphabet = array( "a", "b", "c", "d", "e", "f", "g", "h","i", "j","k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
 
 /*start game*/
-	function hangman()
+	public function hangman()
 	{
 		hangman::start();
 	}
 	
 	/*changes difficulty options. Easy-Medium-Hard*/
-	function changeDifficulty($option)
+	public function changeDifficulty($option)
 	{		
 		switch ($option)
 		{
@@ -32,7 +32,7 @@ class hangman extends userlife
 		$this->loadWords();
 		$this->newGame();
 	}
-	function newGame($max_guesses = 7)
+	public function newGame($max_guesses = 7)
 	{
 	
 /*starts game, clears gussed letters, sets guess limit*/
@@ -41,10 +41,9 @@ class hangman extends userlife
 		if ($max_guesses)
 			$this->setGuesses($max_guesses);
 			
-		//pick a word for them to try and guess
 		$this->setWord();
 	}
-	function playGame()
+	public function playGame()
 	{
 		if (isset($_POST['change']) )
 			$this->changeDifficulty($_POST['difficulty']);	
@@ -56,13 +55,13 @@ class hangman extends userlife
 		$this->displayGame();
 	}
 	/*set guesses*/
-	function setGuesses($amount = 0)
+	public function setGuesses($amount = 0)
 	{		
 		$this->guesses = $amount;
 	}
 	
 	/*display game*/
-	function displayGame()
+	public function displayGame()
 	{
 		/*display guessed letters*/
 		  if (!empty($this->letters))
@@ -110,7 +109,7 @@ class hangman extends userlife
 	
 	/*letter guessing*/
 	
-	function guessLetter($letter)
+	public function guessLetter($letter)
 	{			
 
 		if ($this->isOver())
@@ -172,7 +171,7 @@ class hangman extends userlife
 	}
 	
 /*selects random word from database*/
-	function setWord()
+	public function setWord()
 	{
 /*loads and converts word list*/
 		if (empty($this->wList))
@@ -183,7 +182,7 @@ class hangman extends userlife
 	}
 	
 	/*selects words based on difficulty selected*/
-	function loadWords()
+	public function loadWords()
 	{
 		$loop = mysqli_query("SELECT word FROM words WHERE difficulty='$this->difficulty' ORDER BY RAND()")
 			or die ('cannot load hangman words for this difficulty');
@@ -194,7 +193,7 @@ class hangman extends userlife
 	
 	/*displays images*/
 
-	function picture()
+	public function picture()
 	{
 		$count = 1;
 
@@ -213,7 +212,7 @@ $count++;
 	
 	/*display correctly guessed letters*/
 
-	function solvedWord()
+	public function solvedWord()
 	{
 		$result = "";
 		for ($i = 0; $i < count($this->WLetters); $i++)
@@ -233,7 +232,7 @@ $count++;
 	}
 	
 	/*converts word to Array*/
-	function wordToArray()
+	public function wordToArray()
 	{
 		$this->WLetters = array(); 
 		
@@ -242,7 +241,7 @@ $count++;
 	}
 	
 	/*checks if input is an alphabet letter */
-	function isLetter($value)
+	public function isLetter($value)
 	{
 		if (in_array($value, $this->alphabet))
 			return true;

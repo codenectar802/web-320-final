@@ -26,20 +26,22 @@ if (!isset($_COOKIE[$cookie_name])) {
 if(isset($_POST['account_action'])) {
 	if ($_POST['account_action'] == 'logout') {
 		$user_login_manager->logout();
-	} elseif ($_POST['account_action'] == 'login') {
-		$success = $user_login_manager->login($_POST['name_input'], $_POST['pass_input']);
-		$login_error = True;
-	} elseif ($_POST['account_action'] == 'signup') {
-		$availablility = $user_login_manager->check_if_available($_POST['username_input'], $_POST['email_input']);
-		$signup_username_available = $availablility[0];
-		$signup_email_available = $availablility[1];
+	} elseif ($_POST['account_action'] == 'login' && !$user_login_manager->logged_in) {
+		if ($_POST['login_action']=='try') {
+			$success = $user_login_manager->login($_POST['name_input'], $_POST['pass_input']);
+			$login_error = $success ? False : True;
+		}
+	} elseif ($_POST['account_action'] == 'signup' && !$user_login_manager->logged_in) {
+		$availablility = $user_login_manager->check_if_unavailable($_POST['username_input'], $_POST['email_input']);
+		$signup_username_unavailable = $availablility[0];
+		$signup_email_unavailable = $availablility[1];
 		$signup_email_missing = empty($_POST['email_input']) ? True : False;
 		$signup_fname_missing = empty($_POST['fname_input']) ? True : False;
 		$signup_lname_missing = empty($_POST['lname_input']) ? True : False;
 		$signup_username_missing = empty($_POST['username_input']) ? True : False;
 		$signup_pass_missing = empty($_POST['pass_input']) ? True : False;
-		$errors = array($signup_username_available, 
-						$signup_email_available, 
+		$errors = array($signup_username_unavailable, 
+						$signup_email_unavailable, 
 						$signup_email_missing, 
 						$signup_fname_missing, 
 						$signup_lname_missing,
@@ -63,7 +65,7 @@ if(isset($_POST['account_action'])) {
 			$new_user = new User($data);
 			$new_user = $user_login_manager->user_dbhandler->create_user($new_user, $_POST['pass_input']);
 			$success = $user_login_manager->login($_POST['username_input'], $_POST['pass_input']);
-		} 
+		}
 
 	}
 }
