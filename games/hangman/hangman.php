@@ -1,26 +1,26 @@
+
 <?php
 include '../../header_controller.php';
-$dbconnection=mysqli_connect("localhost", "root", "root","web320final") or die ('cannot connect to DB');
-$connection= mysqli_select_db($dbconnection, "words");
+require_once 'hangmanGame.php';
 ?>
 
 
 <html>
-	<head>
-		<title>Hangman</title>
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <link rel="stylesheet" type="text/css" href="../../libs/bootstrap-3.2.0/css/bootstrap.min.css">
+    <head>
+        <title>Hangman</title>
         
-        <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script src="../../libs/bootstrap-3.2.0/js/bootstrap.js"></script>
-        <script src="../../js/index.js"></script>
+        
 
         <?php 
             $root_path = "../../";
             include('../../header.php');
-            include 'hangmanGame.php';
+            $dbconnection=mysqli_connect("localhost", "root", "root","web320final") or die ('cannot connect to DB');
+            $connection= mysqli_select_db($dbconnection, "words");
         ?>
 
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="../../libs/bootstrap-3.2.0/css/bootstrap.min.css">
+        
 
 <?php 
     // if userlife is stored in the session
@@ -36,7 +36,7 @@ $connection= mysqli_select_db($dbconnection, "words");
 
 
     </head>
-	
+    
     <body>
 
 
@@ -53,13 +53,13 @@ $connection= mysqli_select_db($dbconnection, "words");
         <div id="game-pane" class="tab-pane active">
             <div class="typing_game_container">
                <div id="content">
-		<form action="" method="POST"> 
-		<h2>Hangman</h2>
-		<?php
+        <form action="" method="POST"> 
+        <h2>Hangman</h2>
+        <?php
             $game->playGame();
         ?>
-		</form>
-		</div>
+        </form>
+        </div>
             </div>
         </div>
         
@@ -83,6 +83,6 @@ $connection= mysqli_select_db($dbconnection, "words");
             <div>
             </div>
         </div>
-		
-	</body>
+        
+    </body>
 </html>

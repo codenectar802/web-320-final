@@ -43,6 +43,11 @@ CREATE TABLE IF NOT EXISTS `hangmanscore` (
   `id` int(11) NOT NULL,
   `scored` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE IF NOT EXISTS `words` (
+  `word` varchar(50) NOT NULL,
+  `difficulty` enum('Easy','Medium','Hard') NOT NULL DEFAULT 'Easy',
+  UNIQUE KEY `word` (`word`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 INSERT INTO `words` (`word`, `difficulty`) VALUES
 ('rat', 'Easy'),
 ('fish', 'Easy'),
